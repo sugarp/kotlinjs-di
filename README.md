@@ -26,6 +26,9 @@ and then you inject the defined:
 var shape = DI.inject<IShape>()
 ```
 
+NOTE:
+This is designed and developed in time when annotations are not supported for JS and reflection for JS is only in its beginnings.
+
 
 
  
