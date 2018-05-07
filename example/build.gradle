@@ -1,0 +1,67 @@
+buildscript {
+    ext.kotlin_version = '1.2.31'
+
+    repositories {
+        maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-frontend-plugin:0.0.27"
+    }
+}
+
+group 'com.ps'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'org.jetbrains.kotlin.frontend'
+apply plugin: 'kotlin-platform-js'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(":kotlinjs-di")
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+    testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+kotlinFrontend {
+    downloadNodeJsVersion = "9.10.1"
+
+    npm {
+
+    }
+
+    sourceMaps = true
+
+    webpackBundle {
+        sourceMapEnabled = true
+        bundleName = "main"
+        contentPath = file('src/main/web')
+        port = 8082
+    }
+
+    define "PRODUCTION", false
+
+//    karma {
+//        port = 9876
+//        runnerPort = 9100
+//        reporters = listOf("progress")
+//        frameworks = listOf("qunit") // 1
+//        preprocessors = listOf("...")
+//    }
+}
+
+// configure kotlin compiler
+compileKotlin2Js {
+    kotlinOptions.metaInfo = true
+    kotlinOptions.outputFile = "$project.buildDir.path/js/${project.name}.js"
+    kotlinOptions.sourceMap = true
+    kotlinOptions.sourceMapEmbedSources = "always"
+    kotlinOptions.moduleKind = 'commonjs'
+    kotlinOptions.main = "call"
+}

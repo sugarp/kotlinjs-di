@@ -1,0 +1,5 @@
+rootProject.name = 'example'
+
+include ':kotlinjs-di'
+project(':kotlinjs-di').projectDir = new File(settingsDir, '..')
+
